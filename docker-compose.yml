@@ -1,0 +1,25 @@
+version: "3.5"
+
+services: 
+  mongo_db: 
+    container_name: db_container
+    image: mongo:latest
+    restart: always
+    volumes: 
+      - mongo_db:/data/db
+  backend:
+    build: .
+    ports: 
+      - 8080:8080
+      - 9229:9229 # default debugging port
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+    command: npm run dev
+    environment:
+      PORT: 8080
+      MONGO_URI: mongodb+srv://Faziskado:AmerigoVespuchi2@clusterudemy.ezfps6u.mongodb.net/?retryWrites=true&w=majority
+    depends_on: 
+      - mongo_db
+volumes:
+  mongo_db: {}
