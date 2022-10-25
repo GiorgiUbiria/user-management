@@ -5,3 +5,5 @@ Project Structure
 3) User - has no access to users, but has access to one only page on which user can buy admin rights (stripe)
 
 Project will have sign up, sign in, sign out functionality
+
+Until important changes, all the minor changes will be commited to dev branch.
