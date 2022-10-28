@@ -4,7 +4,7 @@ import express, {
   NextFunction,
   Application,
   ErrorRequestHandler,
-} from "express"
+} from "express";
 
 const errorHandler: ErrorRequestHandler = async (
   error,
@@ -12,11 +12,11 @@ const errorHandler: ErrorRequestHandler = async (
   res: Response,
   next: NextFunction
 ): Promise<void> => {
-  res.status(error.status || 500)
+  res.status(error.status || 500);
   res.send({
     status: error.status || 500,
     message: error.message,
-  })
-}
+  });
+};
 
-export = errorHandler
+export = errorHandler;
