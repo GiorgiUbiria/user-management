@@ -12,10 +12,6 @@ const UserSchema: Schema = new Schema({
     required: true,
     unique: true,
   },
-  login: {
-    type: String,
-    required: true,
-  },
   password: {
     type: String,
     required: true,
@@ -23,6 +19,7 @@ const UserSchema: Schema = new Schema({
   username: {
     type: String,
     required: true,
+    unique: true,
   },
   role: {
     type: String,
