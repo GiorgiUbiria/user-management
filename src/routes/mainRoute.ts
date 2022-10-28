@@ -1,9 +1,9 @@
 import { Request, Response, NextFunction, Router } from "express";
 
+import mainController from "../controllers/mainController";
+
 const mainRoute = Router();
 
-mainRoute.get("/", async (req: Request, res: Response): Promise<void> => {
-  res.render("index", { layout: false });
-});
+mainRoute.get("/", mainController);
 
-export = mainRoute;
+export default mainRoute;
