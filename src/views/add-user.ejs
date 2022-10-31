@@ -1,37 +1,20 @@
-<!DOCTYPE html>
+<%- include('includes/_header.ejs') %>
 
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <!-- StyleSheet -->
-    <link rel="stylesheet" href="styles.css" />
-    <!-- Font Awesome -->
-    <script
-      src="https://kit.fontawesome.com/b8e99704d3.js"
-      crossorigin="anonymous"
-    ></script>
-    <!-- Title -->
-    <title><%= pageTitle %></title>
-  </head>
+<form action="/add-user" method="post">
+  <label class="form-label" for="form2Example1">Email address:</label>
+  <input type="email" name="email" />
 
-  <body>
-    <form action="/add-user" method="post">
-      <input type="email" name="email"/>
-      <label class="form-label" for="form2Example1">Email address</label>
+  <label class="form-label" for="form2Example1">Password:</label>
+  <input type="password" name="password" />
 
-      <input type="password" name="password"/>
-      <label class="form-label" for="form2Example1">Password</label>
+  <label class="form-label" for="form2Example1">Username:</label>
+  <input type="text" name="username" />
 
-      <input type="text" name="username"/>
-      <label class="form-label" for="form2Example1">Username</label>
+  <label class="form-label" for="form2Example1">Role:</label>
+  <input type="text" name="role" />
+  
+  <button type="submit" class="btn btn-primary btn-block mb-4">Add User</button>
+</form>
 
-      <input type="text" name="role">
-      <label class="form-label" for="form2Example1">Role</label>
-    </form>
 
-    <!-- JavaScript -->
-    <script src="app.js"></script>
-  </body>
-</html>
+<%- include("includes/_footer.ejs") %>

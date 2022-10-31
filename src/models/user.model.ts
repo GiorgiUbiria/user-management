@@ -1,8 +1,8 @@
 import mongoose, { Schema, Document } from "mongoose";
 
 export enum UserRoles {
-  Standard,
-  Admin,
+  Standard = "Standard",
+  Admin = "Admin",
 };
 
 export interface IUser extends Document {
@@ -28,7 +28,9 @@ const UserSchema: Schema = new Schema({
     required: true,
   },
   role: {
-    type: UserRoles,
+    type: String,
+    enum: UserRoles,
+    default: UserRoles.Standard,
     required: true,
   },
 });

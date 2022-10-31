@@ -6,8 +6,8 @@ import expressLayouts from "express-ejs-layouts";
 import { config } from "dotenv";
 
 import errorHandler from "./middlewares/errorHandler";
-import mainRoute from "./routes/mainRoute";
-import { UserRouter } from "./routes/userRoute";
+/* import mainRoute from "./routes/mainRoute"; */
+import UserRouter from "./routes/userRoute";
 
 config();
 
@@ -26,7 +26,7 @@ app.use(expressLayouts);
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
 
-app.use(mainRoute);
+/* app.use(mainRoute); */
 app.use(UserRouter);
 
 app.use(

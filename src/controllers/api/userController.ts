@@ -63,12 +63,20 @@ interface IUserInput {
   role: IUser["role"];
 }
 
-async function CreateUser({
-  email,
-  username,
-  password,
-  role,
-}: IUserInput, req: Request, res: Response): Promise<void> {
+async function GetCreateUserPage(req: Request, res: Response): Promise<void> {
+  try {
+    res.render("add-user", { layout: false, pageTitle: "Add User" });
+  } catch (error) {
+    // tslint:disable-next-line:no-console
+    console.error(error);
+  }
+}
+
+async function CreateUser(
+  { email, username, password, role }: IUserInput,
+  req: Request,
+  res: Response
+): Promise<void> {
   email = req.body.email;
   username = req.body.username;
   password = req.body.password;
@@ -84,7 +92,6 @@ async function CreateUser({
   try {
     const result = await user.save();
     // tslint:disable-next-line:no-console
-    console.log(result);
     res.redirect("/");
   } catch (error) {
     // tslint:disable-next-line:no-console
@@ -97,11 +104,25 @@ async function GetUsers(req: Request, res: Response): Promise<void> {
     const users = await UserSchema.find();
     // tslint:disable-next-line:no-console
     console.log(users);
-    res.render("index", { layout: false, pageTitle: "Home", path: "/", users });
+    res.render("users-page", {
+      layout: false,
+      pageTitle: "Users",
+      path: "/",
+      users,
+    });
   } catch (error) {
     // tslint:disable-next-line:no-console
     console.error(error);
   }
 }
 
-export = { CreateUser, GetUsers };
+async function GetLoginPage(req: Request, res: Response): Promise<void> {
+  try {
+    res.render("login", { layout: false, pageTitle: "Login" });
+  } catch (error) {
+    // tslint:disable-next-line:no-console
+    console.error(error);
+  }
+}
+
+export = { CreateUser, GetUsers, GetLoginPage, GetCreateUserPage };
