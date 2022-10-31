@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction, Router } from "express";
 
-import mainController from "../controllers/mainController";
+import mainController from "../controllers/api/mainController";
 
 const mainRoute = Router();
 

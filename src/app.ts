@@ -7,7 +7,7 @@ import { config } from "dotenv";
 
 import errorHandler from "./middlewares/errorHandler";
 import mainRoute from "./routes/mainRoute";
-import { UsersRouter } from "./routes/userRoute";
+import { UserRouter } from "./routes/userRoute";
 
 config();
 
@@ -17,7 +17,7 @@ app.use(morgan("dev"));
 
 app.use(express.json());
 
-app.use(express.urlencoded({ extended: true }));
+app.use(express.urlencoded({ extended: false }));
 
 app.use(express.static("public"));
 
@@ -27,7 +27,7 @@ app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
 
 app.use(mainRoute);
-app.use(UsersRouter);
+app.use(UserRouter);
 
 app.use(
   async (req: Request, res: Response, next: NextFunction): Promise<void> => {

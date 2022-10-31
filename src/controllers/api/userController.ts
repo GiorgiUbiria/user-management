@@ -53,9 +53,10 @@ const addUser = async (
 export { getUsers, addUser };
  */
 
-import UserSchema, { IUser } from "../models/user.model";
+import { Request, Response, NextFunction, Router } from "express";
+import UserSchema, { IUser } from "../../models/user.model";
 
-interface ICreateUserInput {
+interface IUserInput {
   email: IUser["email"];
   username: IUser["username"];
   password: IUser["password"];
@@ -67,19 +68,40 @@ async function CreateUser({
   username,
   password,
   role,
-}: ICreateUserInput): Promise<IUser> {
-  return UserSchema.create({
+}: IUserInput, req: Request, res: Response): Promise<void> {
+  email = req.body.email;
+  username = req.body.username;
+  password = req.body.password;
+  role = req.body.role;
+
+  const user = new UserSchema({
     email,
     username,
     password,
     role,
-  })
-    .then((data: IUser) => {
-      return data;
-    })
-    .catch((error: Error) => {
-      throw error;
-    });
+  });
+
+  try {
+    const result = await user.save();
+    // tslint:disable-next-line:no-console
+    console.log(result);
+    res.redirect("/");
+  } catch (error) {
+    // tslint:disable-next-line:no-console
+    console.log(error);
+  }
 }
 
-export default { CreateUser };
+async function GetUsers(req: Request, res: Response): Promise<void> {
+  try {
+    const users = await UserSchema.find();
+    // tslint:disable-next-line:no-console
+    console.log(users);
+    res.render("index", { layout: false, pageTitle: "Home", path: "/", users });
+  } catch (error) {
+    // tslint:disable-next-line:no-console
+    console.error(error);
+  }
+}
+
+export = { CreateUser, GetUsers };
