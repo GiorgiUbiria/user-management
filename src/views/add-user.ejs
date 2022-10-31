@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <!-- StyleSheet -->
+    <link rel="stylesheet" href="styles.css" />
+    <!-- Font Awesome -->
+    <script
+      src="https://kit.fontawesome.com/b8e99704d3.js"
+      crossorigin="anonymous"
+    ></script>
+    <!-- Title -->
+    <title><%= pageTitle %></title>
+  </head>
+
+  <body>
+    <form action="/add-user" method="post">
+      <input type="email" name="email"/>
+      <label class="form-label" for="form2Example1">Email address</label>
+
+      <input type="password" name="password"/>
+      <label class="form-label" for="form2Example1">Password</label>
+
+      <input type="text" name="username"/>
+      <label class="form-label" for="form2Example1">Username</label>
+
+      <input type="text" name="role">
+      <label class="form-label" for="form2Example1">Role</label>
+    </form>
+
+    <!-- JavaScript -->
+    <script src="app.js"></script>
+  </body>
+</html>
