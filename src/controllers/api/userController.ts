@@ -54,13 +54,13 @@ export { getUsers, addUser };
  */
 
 import { Request, Response, NextFunction, Router } from "express";
-import UserSchema, { IUser } from "../../models/user.model";
+import UserSchema, { IUser, UserRoles } from "../../models/user.model";
 
 interface IUserInput {
   email: IUser["email"];
   username: IUser["username"];
   password: IUser["password"];
-  role: IUser["role"];
+  role: UserRoles;
 }
 
 async function GetCreateUserPage(req: Request, res: Response): Promise<void> {
@@ -72,26 +72,22 @@ async function GetCreateUserPage(req: Request, res: Response): Promise<void> {
   }
 }
 
-async function CreateUser(
-  { email, username, password, role }: IUserInput,
-  req: Request,
-  res: Response
-): Promise<void> {
-  email = req.body.email;
-  username = req.body.username;
-  password = req.body.password;
-  role = req.body.role;
+async function CreateUser(req: Request, res: Response): Promise<void> {
+  const UserEmail = req.body.email;
+  const UserName = req.body.username;
+  const UserPassword = req.body.password;
 
   const user = new UserSchema({
-    email,
-    username,
-    password,
-    role,
+    email: UserEmail,
+    username: UserName,
+    password: UserPassword,
+    role: UserRoles.Standard,
   });
 
   try {
     const result = await user.save();
     // tslint:disable-next-line:no-console
+    console.log(result);
     res.redirect("/");
   } catch (error) {
     // tslint:disable-next-line:no-console

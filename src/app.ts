@@ -1,6 +1,7 @@
 import express, { Request, Response, NextFunction, Application } from "express";
 import path from "path";
 import createHttpError from "http-errors";
+import bodyParser from "body-parser";
 import morgan from "morgan";
 import expressLayouts from "express-ejs-layouts";
 import { config } from "dotenv";
@@ -17,7 +18,7 @@ app.use(morgan("dev"));
 
 app.use(express.json());
 
-app.use(express.urlencoded({ extended: false }));
+app.use(bodyParser.urlencoded({ extended: false }));
 
 app.use(express.static("public"));
 
