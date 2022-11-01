@@ -1,7 +1,10 @@
 import express, { Request, Response, NextFunction, Application } from "express";
 import path from "path";
 import createHttpError from "http-errors";
+import session from "express-session";
+import passport from "passport";
 import bodyParser from "body-parser";
+import flash from "express-flash";
 import morgan from "morgan";
 import expressLayouts from "express-ejs-layouts";
 import { config } from "dotenv";
@@ -14,7 +17,27 @@ config();
 
 const app: Application = express();
 
+app.use(
+  session({
+    secret: process.env.SESSION_SECRET || "secret",
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+      httpOnly: true,
+    },
+  })
+);
+
+app.use(passport.initialize());
+
+app.use(passport.session());
+
+/* tslint:disable no-var-requires */
+require("./controllers/auth/user.auth");
+
 app.use(morgan("dev"));
+
+app.use(flash());
 
 app.use(express.json());
 

@@ -1,59 +1,6 @@
-/* import { Request, Response, NextFunction, Router } from "express";
-import UserSchema from "../models/userSchema";
-
-const getUsers = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-): Promise<void> => {
-  try {
-    const users = await UserSchema.find();
-    // tslint:disable-next-line:no-console
-    console.log(users);
-    res.render("index", { layout: false, pageTitle: "Home", path: "/", users });
-  } catch (error) {
-    // tslint:disable-next-line:no-console
-    console.error(error);
-  }
-};
-
-const addUser = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-): Promise<void> => {
-  const userUserName: string = req.body.username;
-  const userPassword: string = req.body.password;
-  const userEmail: string = req.body.email;
-  const userRole: string = req.body.role;
-
-  // tslint:disable-next-line:no-console
-  console.log(userUserName);
-  // tslint:disable-next-line:no-console
-  console.log(userEmail);
-
-  const user = new UserSchema({
-    email: userEmail,
-    password: userPassword,
-    username: userUserName,
-    role: userRole,
-  });
-
- try {
-    const result = await user.save();
-    // tslint:disable-next-line:no-console
-    console.log(result);
-    res.redirect("/");
-  } catch (error) {
-    // tslint:disable-next-line:no-console
-    console.log(error);
-  }
-};
-
-export { getUsers, addUser };
- */
-
 import { Request, Response, NextFunction, Router } from "express";
+import createHttpError from "http-errors";
+import bcrypt from "bcrypt";
 import UserSchema, { IUser, UserRoles } from "../../models/user.model";
 
 interface IUserInput {
@@ -76,6 +23,7 @@ async function CreateUser(req: Request, res: Response): Promise<void> {
   const UserEmail = req.body.email;
   const UserName = req.body.username;
   const UserPassword = req.body.password;
+  const HashedPassword = await bcrypt.hash(UserPassword, 10);
 
   const user = new UserSchema({
     email: UserEmail,
@@ -121,4 +69,52 @@ async function GetLoginPage(req: Request, res: Response): Promise<void> {
   }
 }
 
-export = { CreateUser, GetUsers, GetLoginPage, GetCreateUserPage };
+async function GetSignUpPage(req: Request, res: Response): Promise<void> {
+  try {
+    res.render("sign-up", { layout: false, pageTitle: "Register" });
+  } catch (error) {
+    // tslint:disable-next-line:no-console
+    console.error(error);
+  }
+}
+
+async function SignUpUser(req: Request, res: Response): Promise<void> {
+  const UserEmail = req.body.email;
+  const UserName = req.body.username;
+  const UserPassword = req.body.password;
+  const RepeatedPassword = req.body.repeated_password;
+  const HashedPassword = await bcrypt.hash(UserPassword, 10);
+
+  let errorMessage: string = "";
+  if (RepeatedPassword !== UserPassword) {
+    errorMessage = "Passwords do not match";
+    throw new createHttpError.InternalServerError(errorMessage);
+  }
+
+
+  const user = new UserSchema({
+    email: UserEmail,
+    username: UserName,
+    password: HashedPassword,
+    role: UserRoles.Standard,
+  });
+
+  try {
+    const result = await user.save();
+    // tslint:disable-next-line:no-console
+    console.log(result);
+    res.redirect("/users");
+  } catch (error) {
+    // tslint:disable-next-line:no-console
+    console.log(error);
+  }
+}
+
+export = {
+  CreateUser,
+  GetUsers,
+  GetLoginPage,
+  GetCreateUserPage,
+  GetSignUpPage,
+  SignUpUser,
+};

@@ -1,17 +1,30 @@
 import { Request, Response, NextFunction, Router } from "express";
+import passport from "passport";
 import UserController from "../controllers/api/userController";
-import mainController from "../controllers/api/mainController";
 
 const UserRouter: Router = Router();
-
-UserRouter.get("/", mainController);
 
 UserRouter.get("/add-user", UserController.GetCreateUserPage);
 
 UserRouter.get("/login", UserController.GetLoginPage);
 
+UserRouter.get("/sign-up", UserController.GetSignUpPage);
+
 UserRouter.get("/users", UserController.GetUsers);
 
 UserRouter.post("/add-user", UserController.CreateUser);
+
+UserRouter.post("/sign-up", UserController.SignUpUser);
+
+UserRouter.post(
+  "/login",
+  passport.authenticate("local", {
+    failureRedirect: "/login",
+    failureFlash: true,
+  }),
+  (req: Request, res: Response) => {
+    res.redirect("/users");
+  }
+);
 
 export default UserRouter;
