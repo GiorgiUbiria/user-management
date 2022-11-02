@@ -1,6 +1,15 @@
 import { Request, Response, NextFunction, Router } from "express";
 import createHttpError from "http-errors";
 import bcrypt from "bcrypt";
+import async from "async";
+import passport from "passport";
+import { IVerifyOptions } from "passport-local";
+import { WriteError } from "mongodb";
+import session from "express-session";
+import { CallbackError } from "mongoose";
+import { body, check, validationResult } from "express-validator";
+
+import "../auth/user.auth";
 import UserSchema, { IUser, UserRoles } from "../../models/user.model";
 
 interface IUserInput {
@@ -19,7 +28,7 @@ async function GetCreateUserPage(req: Request, res: Response): Promise<void> {
   }
 }
 
-async function CreateUser(req: Request, res: Response): Promise<void> {
+/* async function CreateUser(req: Request, res: Response): Promise<void> {
   const UserEmail = req.body.email;
   const UserName = req.body.username;
   const UserPassword = req.body.password;
@@ -41,7 +50,7 @@ async function CreateUser(req: Request, res: Response): Promise<void> {
     // tslint:disable-next-line:no-console
     console.log(error);
   }
-}
+} */
 
 async function GetUsers(req: Request, res: Response): Promise<void> {
   try {
@@ -91,7 +100,6 @@ async function SignUpUser(req: Request, res: Response): Promise<void> {
     throw new createHttpError.InternalServerError(errorMessage);
   }
 
-
   const user = new UserSchema({
     email: UserEmail,
     username: UserName,
@@ -110,11 +118,49 @@ async function SignUpUser(req: Request, res: Response): Promise<void> {
   }
 }
 
+const PostLogin = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void> => {
+  await check("email", "Email is not valid").isEmail().run(req);
+  await check("password", "Password cannot be blank")
+    .isLength({ min: 1 })
+    .run(req);
+  await body("email").normalizeEmail({ gmail_remove_dots: false }).run(req);
+
+  const errors = validationResult(req);
+
+  if (!errors.isEmpty()) {
+    return res.redirect("/login");
+  }
+
+  passport.authenticate(
+    "local",
+    (err: Error, user: IUser, info: IVerifyOptions) => {
+      if (err) {
+        return next(err);
+      }
+      if (!user) {
+        return res.redirect("/login");
+      }
+      // tslint:disable-next-line:no-shadowed-variable
+      req.logIn(user, (err) => {
+        if (err) {
+          return next(err);
+        }
+        res.redirect(req.session.returnTo || "/");
+      });
+    }
+  )(req, res, next);
+};
+
 export = {
-  CreateUser,
+  // CreateUser,
   GetUsers,
   GetLoginPage,
   GetCreateUserPage,
   GetSignUpPage,
   SignUpUser,
+  PostLogin,
 };

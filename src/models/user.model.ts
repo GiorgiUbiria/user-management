@@ -2,19 +2,33 @@ import createHttpError from "http-errors";
 import bcrypt from "bcrypt";
 import mongoose, { Schema, Document } from "mongoose";
 
+export type IUser = mongoose.Document & {
+  email: string;
+  username: string;
+  password: string;
+  role: UserRoles;
+
+  comparePassword: comparePasswordFunction;
+};
+
+type comparePasswordFunction = (
+  candidatePassword: string,
+  cb: (err: any, isMatch: any) => void
+) => void;
+
 export enum UserRoles {
   Standard = "Standard",
   Admin = "Admin",
-};
+}
 
-export interface IUser extends Document {
+/* export interface IUser extends Document {
   email: string;
   password: string;
   username: string;
   role: UserRoles;
   passwordConfirmation: string,
   comparePassword(this: any, candidatePassword: string): Promise<any>;
-};
+}; */
 
 const UserSchema: Schema = new Schema({
   email: {
@@ -39,7 +53,7 @@ const UserSchema: Schema = new Schema({
   },
 });
 
-const comparePassword = async function(this: any, password: string | Buffer): Promise<any> {
+/* const comparePassword = async function(this: any, password: string | Buffer): Promise<any> {
   try {
     return await bcrypt.compare(password, this.password);
   } catch (error) {
@@ -49,7 +63,17 @@ const comparePassword = async function(this: any, password: string | Buffer): Pr
     }
     throw new createHttpError.InternalServerError(errorMessage);
   }
-}
+} */
+
+const comparePassword: comparePasswordFunction = function (
+  this: any,
+  candidatePassword,
+  cb
+) {
+  bcrypt.compare(candidatePassword, this.password, (err, isMatch) => {
+    cb(err, isMatch);
+  });
+};
 
 UserSchema.methods.comparePassword = comparePassword;
 

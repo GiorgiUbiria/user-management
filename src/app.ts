@@ -17,6 +17,12 @@ config();
 
 const app: Application = express();
 
+declare module "express-session" {
+  export interface SessionData {
+    returnTo: string;
+  }
+}
+
 app.use(
   session({
     secret: process.env.SESSION_SECRET || "secret",

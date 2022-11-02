@@ -12,19 +12,10 @@ UserRouter.get("/sign-up", UserController.GetSignUpPage);
 
 UserRouter.get("/users", UserController.GetUsers);
 
-UserRouter.post("/add-user", UserController.CreateUser);
+/* UserRouter.post("/add-user", UserController.CreateUser); */
 
 UserRouter.post("/sign-up", UserController.SignUpUser);
 
-UserRouter.post(
-  "/login",
-  passport.authenticate("local", {
-    failureRedirect: "/login",
-    failureFlash: true,
-  }),
-  (req: Request, res: Response) => {
-    res.redirect("/users");
-  }
-);
+UserRouter.post("/login", UserController.PostLogin);
 
 export default UserRouter;
