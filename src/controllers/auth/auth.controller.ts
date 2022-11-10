@@ -1,11 +1,28 @@
-import express, { Request, Response, NextFunction } from "express";
+/* import express, { Request, Response, NextFunction } from "express";
 import createHttpError from "http-errors";
 import passport from "passport";
+import flash from "connect-flash";
 import bcrypt from "bcrypt";
 import { IVerifyOptions } from "passport-local";
 import { body, check, validationResult } from "express-validator";
 
 import User, { IUser } from "../../models/user.model";
+
+declare global {
+  namespace Express {
+    interface Request {
+      skip: any;
+    }
+  }
+}
+
+// tslint:disable-next-line
+const getUserParams = (body: { email: any; username: any; role: any }) => {
+  return {
+    email: body.email,
+    username: body.username,
+  };
+};
 
 const isAuthenticated = (req: Request, res: Response, next: NextFunction) => {
   if (req.isAuthenticated()) {
@@ -75,30 +92,31 @@ const SignUpUser = async (req: Request, res: Response): Promise<void> => {
   }
 };
 
-/* const PostLogin = async (
+const PostLogin = async (
   req: Request,
   res: Response,
   next: NextFunction
 ): Promise<void> => {
   await check("email", "Email is not valid").isEmail().run(req);
   await check("password", "Password cannot be blank")
-    .isLength({ min: 1 })
+    .isLength({ min: 8 })
     .run(req);
-  await body("email").normalizeEmail({ gmail_remove_dots: false }).run(req);
 
   const errors = validationResult(req);
 
   if (!errors.isEmpty()) {
     return res.redirect("/login");
   }
+
   // tslint:disable-next-line:no-console
   console.log(req.body);
 };
- */
+
 export = {
   GetLoginPage,
   GetSignUpPage,
-  // PostLogin,
+  PostLogin,
   SignUpUser,
   isAuthenticated,
 };
+ */

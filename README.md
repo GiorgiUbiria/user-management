@@ -8,6 +8,6 @@ Project is role based.
 2) Admin - has access to all the users in his/her admin panel in which he/she can remove, edit, add user(register) by himself.
 3) Standard - has no access to users, but has access to one two pages. One, on which user can buy admin rights (stripe) and second, on which user can enter his/her personal information.
 
-Users will be authenticated and authorized with passportJS (passport-local).
+Users will be authenticated with JWT, using passport-jwt strategy.
 
 Until first full commit of a project, all the minor changes will be commited to branch 'dev'.

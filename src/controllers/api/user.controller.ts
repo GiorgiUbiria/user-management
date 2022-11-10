@@ -1,4 +1,4 @@
-import { Request, Response, NextFunction, Router } from "express";
+import { Request, Response } from "express";
 
 import UserSchema from "../../models/user.model";
 
@@ -10,30 +10,6 @@ const GetCreateUserPage = async (req: Request, res: Response): Promise<void> => 
     console.error(error);
   }
 }
-
-/* async function CreateUser(req: Request, res: Response): Promise<void> {
-  const UserEmail = req.body.email;
-  const UserName = req.body.username;
-  const UserPassword = req.body.password;
-  const HashedPassword = await bcrypt.hash(UserPassword, 10);
-
-  const user = new UserSchema({
-    email: UserEmail,
-    username: UserName,
-    password: UserPassword,
-    role: UserRoles.Standard,
-  });
-
-  try {
-    const result = await user.save();
-    // tslint:disable-next-line:no-console
-    console.log(result);
-    res.redirect("/");
-  } catch (error) {
-    // tslint:disable-next-line:no-console
-    console.log(error);
-  }
-} */
 
 const GetUsers = async (req: Request, res: Response): Promise<void> => {
   try {
@@ -53,7 +29,6 @@ const GetUsers = async (req: Request, res: Response): Promise<void> => {
 }
 
 export = {
-  // CreateUser,
   GetUsers,
   GetCreateUserPage,
 };

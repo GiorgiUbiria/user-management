@@ -1,18 +1,12 @@
-import mongoose, {
+import {
   model,
   Schema,
   PassportLocalDocument,
   PassportLocalSchema,
 } from "mongoose";
 import passportLocalMongoose from "passport-local-mongoose";
-import { IUserType } from "../types/user.interface.types";
 
-export interface IUser extends PassportLocalDocument {
-  email: string;
-  username: string;
-  password: string;
-  role: IUserType["_id"];
-}
+import Role from "../types/user.role.types";
 
 const UserSchema: Schema = new Schema({
   email: {
@@ -25,19 +19,19 @@ const UserSchema: Schema = new Schema({
     required: true,
     unique: true,
   },
-  password: {
+  role: {
     type: String,
+    enum: Role,
+    ref: "userType",
     required: true,
+    default: Role.Standard,
   },
-  role: [
-    {
-      type: Schema.Types.ObjectId,
-      ref: "userType",
-      required: true,
-    },
-  ],
 });
 
-UserSchema.plugin(passportLocalMongoose);
+UserSchema.plugin(passportLocalMongoose, {
+  usernameField: "email",
+});
 
-export default mongoose.model<IUser>("User", UserSchema);
+const User = model("User", UserSchema);
+
+export default User;
