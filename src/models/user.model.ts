@@ -1,12 +1,8 @@
-import {
-  model,
-  Schema,
-  PassportLocalDocument,
-  PassportLocalSchema,
-} from "mongoose";
-import passportLocalMongoose from "passport-local-mongoose";
+import { model, Schema } from "mongoose";
+import bcrypt from "bcrypt";
 
 import Role from "../types/user.role.types";
+import IUser from "../types/user.interface.types";
 
 const UserSchema: Schema = new Schema({
   email: {
@@ -19,18 +15,35 @@ const UserSchema: Schema = new Schema({
     required: true,
     unique: true,
   },
+  password: {
+    type: String,
+    required: true,
+  },
   role: {
     type: String,
     enum: Role,
-    ref: "userType",
     required: true,
     default: Role.Standard,
   },
 });
 
-UserSchema.plugin(passportLocalMongoose, {
-  usernameField: "email",
+UserSchema.pre<IUser>("save", async function (next) {
+  const user = this;
+
+  if (!user.isModified("password")) return next();
+
+  const salt = await bcrypt.genSalt(10);
+  const hash = await bcrypt.hash(user.password, salt);
+  user.password = hash;
+
+  next();
 });
+
+UserSchema.methods.comparePassword = async function (
+  password: string
+): Promise<boolean> {
+  return await bcrypt.compare(password, this.password);
+};
 
 const User = model("User", UserSchema);
 

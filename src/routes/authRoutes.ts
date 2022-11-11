@@ -1,24 +1,23 @@
-/* import { Request, Response, NextFunction, Router } from "express";
+import { Router } from "express";
 import passport from "passport";
 
 import AuthController from "../controllers/auth/auth.controller";
 
 const AuthRouter: Router = Router();
 
-AuthRouter.post("/sign-up", AuthController.SignUpUser);
+AuthRouter.post("/sign-up", AuthController.signUp);
 
 AuthRouter.post(
   "/login",
-  passport.authenticate("local", {
+  passport.authenticate("jwt", {
+    session: false,
     failureRedirect: "/login",
-    failureMessage: true,
   }),
-  AuthController.PostLogin
+  AuthController.signIn
 );
 
-AuthRouter.get("/login", AuthController.GetLoginPage);
+AuthRouter.get("/login", AuthController.getSignInPage);
 
-AuthRouter.get("/sign-up", AuthController.GetSignUpPage);
+AuthRouter.get("/sign-up", AuthController.getSignUpPage);
 
 export default AuthRouter;
- */

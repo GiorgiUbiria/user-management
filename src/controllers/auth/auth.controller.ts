@@ -1,122 +1,93 @@
-/* import express, { Request, Response, NextFunction } from "express";
-import createHttpError from "http-errors";
-import passport from "passport";
-import flash from "connect-flash";
-import bcrypt from "bcrypt";
-import { IVerifyOptions } from "passport-local";
-import { body, check, validationResult } from "express-validator";
+import { Request, Response } from "express";
+import jwt from "jsonwebtoken";
 
-import User, { IUser } from "../../models/user.model";
+import User from "../../models/user.model";
+import IUser from "../../types/user.interface.types";
+import config from "../../config/config";
+import issueJWT from "../../config/utils";
 
-declare global {
-  namespace Express {
-    interface Request {
-      skip: any;
-    }
-  }
-}
-
-// tslint:disable-next-line
-const getUserParams = (body: { email: any; username: any; role: any }) => {
-  return {
-    email: body.email,
-    username: body.username,
-  };
+const getSignInPage = async (req: Request, res: Response): Promise<any> => {
+  res.render("login", { layout: false, pageTitle: "Sign In" });
 };
 
-const isAuthenticated = (req: Request, res: Response, next: NextFunction) => {
-  if (req.isAuthenticated()) {
-    return next();
+const getSignUpPage = async (req: Request, res: Response): Promise<any> => {
+  res.render("sign-up", { layout: false, pageTitle: "Sign Up" });
+};
+
+const signUp = async (req: Request, res: Response): Promise<any> => {
+  const username = req.body.username;
+  const email = req.body.email;
+  const password = req.body.password;
+
+  const user = await User.findOne({ email });
+
+  if (user) {
+    return res.status(409).send({ message: "User already exists" });
   }
+
+  if (!password || password < 8) {
+    return res
+      .status(422)
+      .send({ message: "Provide password at least of length 6" });
+  }
+
+  const newUser: any | IUser = new User({
+    username,
+    email,
+    password,
+  });
+
+  await newUser.save();
+
+  // tslint:disable-next-line
+  const jwt = issueJWT(newUser);
+
+  res.json({
+    success: true,
+    user,
+    token: jwt.token,
+    expiresIn: jwt.expires,
+  });
+
   res.redirect("/login");
 };
 
-const GetLoginPage = async (req: Request, res: Response): Promise<void> => {
-  try {
-    res.render("login", { layout: false, pageTitle: "Login" });
-  } catch (error) {
-    // tslint:disable-next-line:no-console
-    console.error(error);
-  }
-};
+const signIn = async (req: Request, res: Response): Promise<any> => {
+  const email = req.body.email;
+  const password = req.body.password;
 
-const GetSignUpPage = async (req: Request, res: Response): Promise<void> => {
-  try {
-    res.render("sign-up", { layout: false, pageTitle: "Register" });
-  } catch (error) {
-    // tslint:disable-next-line:no-console
-    console.error(error);
-  }
-};
-
-const SignUpUser = async (req: Request, res: Response): Promise<void> => {
-  const UserEmail = req.body.email;
-  const UserName = req.body.username;
-  const UserPassword = req.body.password;
-  const RepeatedPassword = req.body.repeated_password;
-  const HashedPassword = await bcrypt.hash(UserPassword, 10);
-
-  if (UserPassword.length < 8) {
-    req.flash(
-      "error",
-      "Account not created. Password must be 7+ characters long"
-    );
-    return res.redirect("/signup");
+  if (!req.body.email || !req.body.password) {
+    return res
+      .status(401)
+      .send({ message: "Please fill all the fields before submitting!" });
   }
 
-  let errorMessage: string = "";
-  if (RepeatedPassword !== UserPassword) {
-    errorMessage = "Passwords do not match";
-    throw new createHttpError.InternalServerError(errorMessage);
+  const user: any | IUser = await User.findOne({ email });
+
+  if (!user) {
+    res.status(401).json({ success: false, message: "could not find user" });
   }
 
-  const user = new User({
-    email: UserEmail,
-    username: UserName,
-    password: HashedPassword,
-  });
+  const isValid: any = user.comparePassword(password);
 
-  try {
-    const result = await user.save();
-    // tslint:disable-next-line:no-console
-    console.log(result);
-    res.redirect("/users");
-  } catch (error) {
-    // tslint:disable-next-line:no-console
-    console.log(error);
-    req.flash(
-      "error",
-      "Error creating a new account. Try a different login method."
-    );
-    return res.redirect("/signup");
-  }
-};
-
-const PostLogin = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-): Promise<void> => {
-  await check("email", "Email is not valid").isEmail().run(req);
-  await check("password", "Password cannot be blank")
-    .isLength({ min: 8 })
-    .run(req);
-
-  const errors = validationResult(req);
-
-  if (!errors.isEmpty()) {
-    return res.redirect("/login");
+  if (isValid) {
+    const tokenObject = issueJWT(user);
+    res.status(200).json({
+      success: true,
+      user,
+      token: tokenObject.token,
+      expiresIn: tokenObject.expires,
+    });
+  } else {
+    res.status(401).json({ success: false, message: "cannot validate user" });
   }
 
-  // tslint:disable-next-line:no-console
-  console.log(req.body);
+  res.redirect("/users");
 };
 
 export = {
-  GetLoginPage,
-  GetSignUpPage,
-  PostLogin,
-  SignUpUser,
-  isAuthenticated,
+  getSignInPage,
+  getSignUpPage,
+  signUp,
+  signIn,
 };
- */
