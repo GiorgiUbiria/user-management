@@ -7,14 +7,7 @@ const AuthRouter: Router = Router();
 
 AuthRouter.post("/sign-up", AuthController.signUp);
 
-AuthRouter.post(
-  "/login",
-  passport.authenticate("jwt", {
-    session: false,
-    failureRedirect: "/login",
-  }),
-  AuthController.signIn
-);
+AuthRouter.post("/login", AuthController.signIn);
 
 AuthRouter.get("/login", AuthController.getSignInPage);
 

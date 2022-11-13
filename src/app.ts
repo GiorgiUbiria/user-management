@@ -1,6 +1,6 @@
 import express, { Request, Response, NextFunction, Application } from "express";
 import passport from "passport";
-import morgan from "morgan";
+import logger from "morgan";
 import createHttpError from "http-errors";
 import cookieParser from "cookie-parser";
 import cors from "cors";
@@ -26,13 +26,13 @@ passport.use(passportMiddleware);
 
 app.use(cors());
 
-app.use(morgan("dev"));
+app.use(logger("dev"));
 
 app.use(cookieParser());
 
 app.use(bodyParser.json());
 
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use(express.static("public"));
 

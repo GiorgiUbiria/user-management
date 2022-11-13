@@ -11,7 +11,6 @@ UserRouter.get(
   "/users",
   passport.authenticate("jwt", {
     session: false,
-    failureRedirect: "/login",
   }),
   UserController.GetUsers
 );

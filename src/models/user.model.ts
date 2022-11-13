@@ -45,6 +45,6 @@ UserSchema.methods.comparePassword = async function (
   return await bcrypt.compare(password, this.password);
 };
 
-const User = model("User", UserSchema);
+const User = model<IUser>("User", UserSchema);
 
 export default User;
