@@ -10,9 +10,7 @@ UserRouter.get("/add-user", UserController.GetCreateUserPage);
 UserRouter.get(
   "/users",
   passport.authenticate("jwt", { session: false }),
-  (req, res, next) => {
-    res.send("shexvedi");
-  }
+  UserController.GetUsers
 );
 
 export default UserRouter;
