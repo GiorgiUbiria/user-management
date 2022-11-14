@@ -1,21 +1,26 @@
 import crypto from "crypto";
 import fs from "fs";
 
-async function GenerateKeys(): Promise<void> {
-  const keyPair = crypto.generateKeyPairSync("rsa", {
-    modulusLength: 4096,
-    publicKeyEncoding: {
-      type: "pkcs1",
-      format: "pem",
+async function GenerateKeys(): Promise<any> {
+  const keyPair = crypto.generateKeyPair(
+    "rsa",
+    {
+      modulusLength: 1024,
+      publicKeyEncoding: {
+        type: "spki",
+        format: "pem",
+      },
+      privateKeyEncoding: {
+        type: "pkcs8",
+        format: "pem",
+      },
     },
-    privateKeyEncoding: {
-      type: "pkcs1",
-      format: "pem",
-    },
-  });
-
-  fs.writeFileSync(__dirname + "/id_rsa_pub.pem", keyPair.publicKey);
-  fs.writeFileSync(__dirname + "/id_rsa_priv.pem", keyPair.privateKey);
+    (err: Error | null, publicKey: string, privateKey: string) => {
+      if (err) throw err;
+      fs.writeFileSync(__dirname + "/id_rsa_pub.pem", publicKey);
+      fs.writeFileSync(__dirname + "/id_rsa_priv.pem", privateKey);
+    }
+  );
 }
 
 GenerateKeys();

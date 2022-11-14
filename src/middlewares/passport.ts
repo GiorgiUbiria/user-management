@@ -6,25 +6,20 @@ import config from "../config/config";
 
 const options: StrategyOptions = {
   jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-  secretOrKey: config.jwtSecret,
+  secretOrKey: config.PUB_KEY,
 };
 
 const JWTStrategy: Strategy = new Strategy(options, async (payload, done) => {
-  // tslint:disable-next-line:no-console
-  console.log("Payload: ", payload);
-  User.findOne(
-    { id: payload.sub },
-    (err: any, user: boolean | Express.User | IUser | undefined) => {
-      if (err) {
-        return done(err, false);
-      }
-      if (user) {
-        return done(null, user);
-      } else {
-        return done(null, false);
-      }
+  await User.findOne({ _id: payload.sub }, (err: any, user: any) => {
+    if (err) {
+      return done(err, false);
     }
-  );
+    if (user) {
+      return done(null, user);
+    } else {
+      return done(null, false);
+    }
+  }).clone();
 });
 
 export default JWTStrategy;

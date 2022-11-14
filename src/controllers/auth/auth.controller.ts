@@ -39,24 +39,23 @@ const signIn = async (req: Request, res: Response): Promise<any> => {
   const userEmail = req.body.email;
   const userPassword = req.body.password;
 
-  const user: IUser = (await User.findOne({ email: userEmail })) as IUser;
+  const user: any = await User.findOne({ email: userEmail }).clone();
 
-  try {
-    const isValid = await user.comparePassword(userPassword);
-    if (isValid) {
-      const tokenObject = utils.issueJWT(user);
-      res.status(200).json({
-        success: true,
-        token: tokenObject.token,
-        expiresIn: tokenObject.expiresIn,
-      });
-    } else
-      res
-        .status(401)
-        .json({ success: false, msg: "you entered the wrong password" });
-  } catch (error) {
-    res.status(401).json({ success: false, msg: "could not find user" });
-  }
+  const isValid = await user.comparePassword(userPassword);
+
+  if (isValid) {
+    const tokenObject = utils.issueJWT(user);
+    res.status(200).json({
+      success: true,
+      token: tokenObject.token,
+      expiresIn: tokenObject.expiresIn,
+    });
+  } else
+    res
+      .status(401)
+      .json({ success: false, msg: "you entered the wrong password" });
+
+  res.status(401).json({ success: false, msg: "could not find user" });
 };
 
 export = {

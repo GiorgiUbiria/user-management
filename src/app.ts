@@ -20,9 +20,9 @@ config();
 
 const app: Application = express();
 
-app.use(passport.initialize());
-
 passport.use(passportMiddleware);
+
+app.use(passport.initialize());
 
 app.use(cors());
 
