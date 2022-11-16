@@ -5,7 +5,7 @@ import IUser from "../types/user.interface.types";
 import config from "../config/config";
 
 const options: StrategyOptions = {
-  jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+  jwtFromRequest: ExtractJwt.fromAuthHeaderWithScheme("JWT"),
   secretOrKey: config.PUB_KEY,
 };
 

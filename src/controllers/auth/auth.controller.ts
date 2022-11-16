@@ -1,9 +1,6 @@
 import { Request, Response } from "express";
-import jwt from "jsonwebtoken";
 
 import User from "../../models/user.model";
-import IUser from "../../types/user.interface.types";
-import config from "../../config/config";
 import utils from "../../config/utils";
 
 const getSignInPage = async (req: Request, res: Response): Promise<any> => {
@@ -31,8 +28,13 @@ const signUp = async (req: Request, res: Response): Promise<any> => {
   });
 
   await newUser.save();
+  const tokenObject = utils.issueJWT(newUser);
+  res.cookie("jwt", tokenObject.token, {
+    httpOnly: true,
+    maxAge: tokenObject.expiresIn * 1000,
+  });
 
-  res.send(newUser);
+  res.redirect("/login");
 };
 
 const signIn = async (req: Request, res: Response): Promise<any> => {
@@ -45,17 +47,15 @@ const signIn = async (req: Request, res: Response): Promise<any> => {
 
   if (isValid) {
     const tokenObject = utils.issueJWT(user);
-    res.status(200).json({
-      success: true,
-      token: tokenObject.token,
-      expiresIn: tokenObject.expiresIn,
+    res.cookie("jwt", tokenObject.token, {
+      httpOnly: true,
+      maxAge: tokenObject.expiresIn * 1000,
     });
+    res.redirect("/");
   } else
     res
       .status(401)
       .json({ success: false, msg: "you entered the wrong password" });
-
-  res.status(401).json({ success: false, msg: "could not find user" });
 };
 
 export = {
