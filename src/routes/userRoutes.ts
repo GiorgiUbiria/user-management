@@ -7,11 +7,9 @@ import UserController from "../controllers/api/user.controller";
 
 const UserRouter: Router = Router();
 
-UserRouter.get("/", utils.verifyJWT, (req, res) => {
-  res.render("index", { layout: false, pageTitle: "Main Page" });
-});
+UserRouter.get("/", UserController.GetIndexPage);
 
-UserRouter.get("/add-user", UserController.GetCreateUserPage);
+UserRouter.get("/add-user", utils.verifyJWT, UserController.GetCreateUserPage);
 
 UserRouter.get(
   "/users",

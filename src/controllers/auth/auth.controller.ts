@@ -58,9 +58,15 @@ const signIn = async (req: Request, res: Response): Promise<any> => {
       .json({ success: false, msg: "you entered the wrong password" });
 };
 
+const logOut = async (req: Request, res: Response): Promise<any> => {
+  res.clearCookie("jwt", { path: "/" });
+  res.redirect("/");
+};
+
 export = {
   getSignInPage,
   getSignUpPage,
   signUp,
   signIn,
+  logOut,
 };

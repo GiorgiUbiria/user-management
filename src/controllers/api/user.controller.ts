@@ -2,14 +2,17 @@ import { Request, Response } from "express";
 
 import UserSchema from "../../models/user.model";
 
-const GetCreateUserPage = async (req: Request, res: Response): Promise<void> => {
+const GetCreateUserPage = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
   try {
     res.render("add-user", { layout: false, pageTitle: "Add User" });
   } catch (error) {
     // tslint:disable-next-line:no-console
     console.error(error);
   }
-}
+};
 
 const GetUsers = async (req: Request, res: Response): Promise<void> => {
   try {
@@ -26,9 +29,14 @@ const GetUsers = async (req: Request, res: Response): Promise<void> => {
     // tslint:disable-next-line:no-console
     console.error(error);
   }
-}
+};
+
+const GetIndexPage = async (req: Request, res: Response): Promise<any> => {
+  res.render("index", { layout: false, pageTitle: "Main Page" });
+};
 
 export = {
   GetUsers,
   GetCreateUserPage,
+  GetIndexPage,
 };
