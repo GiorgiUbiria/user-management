@@ -1,5 +1,13 @@
 #sticky-footer {
   width: 100%;
-  position: fixed;
+  position: sticky;
   bottom: 0;
+  height: 3rem;
+  background-color: rgb(41, 41, 41);
+  color: whitesmoke;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
+
+

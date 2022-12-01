@@ -80,7 +80,7 @@ const Login = () => {
       </p>
       <h1>Sign In</h1>
       <form onSubmit={handleSubmit}>
-        <label htmlFor="username">Email:</label>
+        <label className="label" htmlFor="username">Email:</label>
         <input
           type="text"
           id="username"
@@ -92,7 +92,7 @@ const Login = () => {
           required
         />
 
-        <label htmlFor="password">Password:</label>
+        <label className="label" htmlFor="password">Password:</label>
         <input
           type="password"
           id="password"
@@ -101,7 +101,7 @@ const Login = () => {
           value={password}
           required
         />
-        <button>Sign In</button>
+        <button className="sign__in">Sign In</button>
         <div className="persistCheck">
           <input
             type="checkbox"
@@ -109,7 +109,7 @@ const Login = () => {
             onChange={togglePersist}
             checked={persist}
           />
-          <label htmlFor="persist">Trust This Device</label>
+          <label className="label" htmlFor="persist">Trust This Device</label>
         </div>
       </form>
       <p>

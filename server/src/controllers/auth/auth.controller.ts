@@ -144,8 +144,25 @@ const Logout = async (req: Request, res: Response): Promise<any> => {
   res.sendStatus(204);
 };
 
+const changeRole = async (req: Request, res: Response) => {
+  const cookies = req.cookies;
+
+  if (!cookies?.jwt) return res.sendStatus(401);
+
+  const refreshToken = cookies.jwt;
+
+  const foundUser = (await User.findOne({ refreshToken })) as any;
+
+  foundUser.role = "Admin";
+
+  await foundUser.save();
+
+  res.json(foundUser);
+};
+
 export = {
   signUp,
   Logout,
   Login,
+  changeRole,
 };

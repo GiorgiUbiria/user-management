@@ -14,4 +14,6 @@ AuthRouter.post("/logout", AuthController.Logout);
 
 AuthRouter.get("/refresh", utils.handleRefreshToken);
 
+AuthRouter.post("/changerole", AuthController.changeRole);
+
 export default AuthRouter;

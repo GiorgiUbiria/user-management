@@ -1,6 +1,6 @@
 const userRoles = {
-  Admin: "Admin",
   Standard: "Standard",
+  Admin: "Admin",
   Banned: "Banned",
 };
 

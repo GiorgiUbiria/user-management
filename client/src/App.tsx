@@ -10,6 +10,7 @@ import PersistLogin from "./components/PersistLogin";
 
 import Register from "./pages/Register";
 import Login from "./pages/Login";
+import Personal from "./pages/Personal";
 import Missing from "./pages/Missing";
 import Users from "./pages/Users";
 import Layout from "./pages/Layout";
@@ -27,6 +28,12 @@ const ROLES = {
 };
 
 function App() {
+  /* 
+    1. Style Home Page and Navigation Page
+    2. Add Personal Page for Users
+    3. Add Photo Upload Functionality for Users
+  */
+
   return (
     <>
       <Navigation></Navigation>
@@ -44,6 +51,7 @@ function App() {
             <Route element={<RequireAuth allowedRoles={[ROLES.Standard]} />}>
               <Route path="/" element={<Home />} />
               <Route path="/users" element={<Users />} />
+              <Route path="edituser/:id" element={<Personal />} />
             </Route>
 
             <Route element={<RequireAuth allowedRoles={[ROLES.Banned]} />}>
