@@ -8,15 +8,18 @@ import bodyParser from "body-parser";
 import { config } from "dotenv";
 
 import errorHandler from "./middlewares/errorHandler";
+import compressApp from "./middlewares/compressApp";
 
 import UserRouter from "./routes/userRoutes";
 import AuthRouter from "./routes/authRoutes";
 
-import utils from "./config/utils";
+import utils from "./utils/utils";
 
 config();
 
 const app: Application = express();
+
+app.use(compressApp);
 
 app.use(logger("dev"));
 

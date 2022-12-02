@@ -10,4 +10,4 @@ const db = async (): Promise<any> => {
   }
 };
 
-export = db;
+export default db;

@@ -2,10 +2,13 @@ import { model, Schema } from "mongoose";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
-import config from "../config/config";
-
-import Roles from "../types/user.role.types";
 import IUser from "../types/user.interface.types";
+
+export const Roles = {
+  Standard: "Standard",
+  Admin: "Admin",
+  Banned: "Banned",
+};
 
 const UserSchema: Schema = new Schema({
   email: {
@@ -44,7 +47,7 @@ UserSchema.pre<IUser>("save", async function (next) {
 
   const refreshToken = jwt.sign(
     { email: user.email },
-    config.REFRESH_TOKEN_SECRET,
+    process.env.REFRESH_TOKEN_SECRET as string,
     { expiresIn: "2w" }
   );
 

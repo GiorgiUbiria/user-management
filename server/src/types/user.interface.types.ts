@@ -1,5 +1,5 @@
 import { Document } from "mongoose";
-import Roles from "../types/user.role.types";
+import { Roles } from "../models/user.model";
 
 export default interface IUser extends Document {
   email: string;
