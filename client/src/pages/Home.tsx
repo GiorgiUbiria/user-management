@@ -11,20 +11,20 @@ const Home = () => {
   };
 
   return (
-    <section>
-      <h1>Home</h1>
+    <section className="home__section">
+      <h1 className="home__header">Home</h1>
       <br />
-      <p>You are logged in!</p>
+      <p className="home__paragraph">You are logged in!</p>
       <br />
-      <Link to="/banned">Go to the Banned page</Link>
-      <br />
-      <Link to="/admin">Go to the Admin page</Link>
-      <br />
-      <Link to="/lounge">Go to the Lounge</Link>
-      <br />
-      <Link to="/users">Go to the Users page</Link>
-      <br />
-      <Link to="/linkpage">Go to the link page</Link>
+      <div className="links">
+        <Link to="/banned">Go to the Banned page</Link>
+        <br />
+        <Link to="/admin">Go to the Admin page</Link>
+        <br />
+        <Link to="/users">Go to the Users page</Link>
+        <br />
+        <Link to="/linkpage">Go to the link page</Link>
+      </div>
       <div className="flexGrow">
         <button onClick={signOut}>Sign Out</button>
       </div>

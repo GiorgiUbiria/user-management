@@ -70,7 +70,7 @@ const Login = () => {
   }, [persist]);
 
   return (
-    <section>
+    <section className="login__section">
       <p
         ref={errRef}
         className={errMsg ? "errmsg" : "offscreen"}
@@ -78,12 +78,14 @@ const Login = () => {
       >
         {errMsg}
       </p>
-      <h1>Sign In</h1>
-      <form onSubmit={handleSubmit}>
-        <label className="label" htmlFor="username">Email:</label>
+      <h1 className="login__header">Sign In</h1>
+      <form onSubmit={handleSubmit} className="login__form">
+        <label className="form__label" htmlFor="email">
+          Email:
+        </label>
         <input
-          type="text"
-          id="username"
+          type="email"
+          id="email"
           name="email"
           ref={userRef}
           autoComplete="off"
@@ -92,7 +94,9 @@ const Login = () => {
           required
         />
 
-        <label className="label" htmlFor="password">Password:</label>
+        <label className="form__label" htmlFor="password">
+          Password:
+        </label>
         <input
           type="password"
           id="password"
@@ -101,7 +105,7 @@ const Login = () => {
           value={password}
           required
         />
-        <button className="sign__in">Sign In</button>
+        <button className="login__button">Sign In</button>
         <div className="persistCheck">
           <input
             type="checkbox"
@@ -109,14 +113,16 @@ const Login = () => {
             onChange={togglePersist}
             checked={persist}
           />
-          <label className="label" htmlFor="persist">Trust This Device</label>
+          <label className="persist__label" htmlFor="persist">
+            Trust This Device
+          </label>
         </div>
       </form>
       <p>
         Need an Account?
         <br />
-        <span className="line">
-          <a href="/register">Sign Up</a>
+        <span className="inline__span">
+          <a  className="register__link" href="/register">Sign Up</a>
         </span>
       </p>
     </section>

@@ -1,27 +1,28 @@
 import { useRef, useState, useEffect } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+
 import {
   faCheck,
   faTimes,
   faInfoCircle,
 } from "@fortawesome/free-solid-svg-icons";
+
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import axios from "../api/axios";
 
-const USER_REGEX = /^[A-z][A-z0-9-_]{3,23}$/;
 const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{8,24}$/;
-const REGISTER_URL = "/register";
 
-const Register = () => {
-  const userRef = useRef() as any;
+import useAxiosPrivate from "../hooks/useAxiosPrivate";
+
+const ChangePassword = () => {
+  const axiosPrivate = useAxiosPrivate();
+
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  const pwdRef = useRef() as any;
   const errRef = useRef() as any;
 
-  const [username, setUser] = useState("");
-  const [validName, setValidName] = useState(false);
-  const [userFocus, setUserFocus] = useState(false);
-
-  const [email, setEmail] = useState("");
-  const [validEmail, setValidEmail] = useState(false);
-  const [emailFocus, setEmailFocus] = useState(false);
+  const id = location.pathname.split("/")[2];
 
   const [password, setPwd] = useState("");
   const [validPwd, setValidPwd] = useState(false);
@@ -35,12 +36,8 @@ const Register = () => {
   const [success, setSuccess] = useState(false);
 
   useEffect(() => {
-    userRef.current.focus();
+    pwdRef.current.focus();
   }, []);
-
-  useEffect(() => {
-    setValidName(USER_REGEX.test(username));
-  }, [username]);
 
   useEffect(() => {
     setValidPwd(PWD_REGEX.test(password));
@@ -49,46 +46,46 @@ const Register = () => {
 
   useEffect(() => {
     setErrMsg("");
-  }, [username, password, matchPwd]);
+  }, [password, matchPwd]);
 
   const handleSubmit = async (e: any) => {
     e.preventDefault();
-    // if button enabled with JS hack
-    const v1 = USER_REGEX.test(username);
-    const v2 = PWD_REGEX.test(password);
-    if (!v1 || !v2) {
+    const v1 = PWD_REGEX.test(password);
+
+    if (!v1) {
       setErrMsg("Invalid Entry");
       return;
     }
+
     try {
-      const response = await axios.post(
-        REGISTER_URL,
-        JSON.stringify({ username, email, password }),
+      const response = await axiosPrivate.patch(
+        `/change__password/${id}`,
+        JSON.stringify({ password }),
         {
           headers: { "Content-Type": "application/json" },
           withCredentials: true,
         }
       );
-      console.log(response?.data);
-      console.log(response?.data.accessToken);
-      console.log(JSON.stringify(response));
-      setSuccess(true);
-      //clear state and controlled inputs
-      //need value attrib on inputs for this
-      setUser("");
-      setEmail("");
+      console.log(JSON.stringify(response?.data));
       setPwd("");
       setMatchPwd("");
+      navigate(`/users/${id}`);
     } catch (err: any) {
       if (!err?.response) {
         setErrMsg("No Server Response");
-      } else if (err.response?.status === 409) {
-        setErrMsg("Email Taken");
+      } else if (err.response?.status === 400) {
+        setErrMsg("Missing Password");
+      } else if (err.response?.status === 401) {
+        setErrMsg("Unauthorized");
       } else {
-        setErrMsg("Registration Failed");
+        setErrMsg(err.message);
       }
       errRef.current.focus();
     }
+  };
+
+  const moveToMyPage = async () => {
+    navigate(`/users/${id}`);
   };
 
   return (
@@ -97,11 +94,11 @@ const Register = () => {
         <section>
           <h1>Success!</h1>
           <p>
-            <a href="/login">Sign In</a>
+            <button onClick={moveToMyPage}> My Page </button>
           </p>
         </section>
       ) : (
-        <section className="register__section">
+        <section className="login__section">
           <p
             ref={errRef}
             className={errMsg ? "errmsg" : "offscreen"}
@@ -109,76 +106,23 @@ const Register = () => {
           >
             {errMsg}
           </p>
-          <h1 className="register__header">Register</h1>
-          <form onSubmit={handleSubmit} className="register__form">
-            <label htmlFor="username" className="form__label">
-              Username:
-              <FontAwesomeIcon
-                icon={faCheck}
-                className={validName ? "valid" : "hide"}
-              />
-              <FontAwesomeIcon
-                icon={faTimes}
-                className={validName || !username ? "hide" : "invalid"}
-              />
-            </label>
-            <input
-              type="text"
-              id="username"
-              name="username"
-              ref={userRef}
-              autoComplete="off"
-              onChange={(e) => setUser(e.target.value)}
-              value={username}
-              required
-              aria-invalid={validName ? "false" : "true"}
-              aria-describedby="uidnote"
-              onFocus={() => setUserFocus(true)}
-              onBlur={() => setUserFocus(false)}
-            />
-            <p
-              id="uidnote"
-              className={
-                userFocus && username && !validName
-                  ? "instructions"
-                  : "offscreen"
-              }
-            >
-              <FontAwesomeIcon icon={faInfoCircle} />
-              4 to 24 characters.
-              <br />
-              Must begin with a letter.
-              <br />
-              Letters, numbers, underscores, hyphens allowed.
-            </p>
+          <h1 className="login__header"> Change Password </h1>
 
-            <label htmlFor="email" className="form__label">
-              Email:
-            </label>
-            <input
-              type="email"
-              id="email"
-              name="email"
-              onChange={(e) => setEmail(e.target.value)}
-              value={email}
-              required
-              aria-invalid={validEmail ? "false" : "true"}
-              aria-describedby="emailnote"
-              onFocus={() => setEmailFocus(true)}
-              onBlur={() => setEmailFocus(false)}
-            />
-            <p
-              id="emailnote"
-              className={
-                emailFocus && !validEmail ? "instructions" : "offscreen"
-              }
-            >
-              <FontAwesomeIcon icon={faInfoCircle} />
-              Valid Email
-              <br />
-              Must be only gmail
-              <br />
-            </p>
+          <form onSubmit={handleSubmit} className="login__form">
+            {/* <label className="form__label" htmlFor="password">
+          Password:
+          </label>
+          
+          <input
+          type="password"
+          id="password"
+          name="password"
+          ref={passRef}
+          autoComplete="off"
+          onChange={(e) => setPwd(e.target.value)}
+          value={password}
+          required
+        /> */}
 
             <label htmlFor="password" className="form__label">
               Password:
@@ -195,6 +139,7 @@ const Register = () => {
               type="password"
               id="password"
               name="password"
+              ref={pwdRef}
               onChange={(e) => setPwd(e.target.value)}
               value={password}
               required
@@ -255,26 +200,16 @@ const Register = () => {
             </p>
 
             <button
-              disabled={!validName || !validPwd || !validMatch ? true : false}
+              disabled={!validPwd || !validMatch ? true : false}
               className="register__button"
             >
-              Sign Up
+              Change
             </button>
           </form>
-          <p>
-            Already registered?
-            <br />
-            <span className="inline__span">
-              {/*put router link here*/}
-              <a className="login__link" href="/login">
-                Sign In
-              </a>
-            </span>
-          </p>
         </section>
       )}
     </>
   );
 };
 
-export default Register;
+export default ChangePassword;

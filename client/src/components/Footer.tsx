@@ -1,6 +1,6 @@
 import "./css/Footer.css";
 
-function Footer() {
+const Footer = () => {
   return (
     <footer id="sticky-footer">
       <div className="container">
@@ -8,6 +8,6 @@ function Footer() {
       </div>
     </footer>
   );
-}
+};
 
 export default Footer;

@@ -2,12 +2,12 @@ import { Link } from "react-router-dom";
 
 const Banned = () => {
   return (
-    <section>
-      <h1>Banned Page</h1>
+    <section className="banned__section">
+      <h1 className="banned__header">Banned Page</h1>
       <br />
-      <p>You must have been assigned an Banned role.</p>
+      <p className="admin__paragraph">You must have been assigned an Banned role.</p>
       <div className="flexGrow">
-        <Link to="/">Home</Link>
+        <Link to="/" style={{ color: "gray" }}>Home</Link>
       </div>
     </section>
   );

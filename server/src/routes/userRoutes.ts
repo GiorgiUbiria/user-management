@@ -3,8 +3,10 @@ import { Router } from "express";
 import utils from "../utils/utils";
 
 import GetUsers, {
-  EditUser,
+  ViewUser,
+  EditUsername,
   DeleteUser,
+  ChangePassword,
 } from "../controllers/user/user.controller";
 
 const UserRouter: Router = Router();
@@ -15,9 +17,14 @@ UserRouter.use(utils.verifyJWT);
 /* GET REQUESTS */
 UserRouter.get("/users", GetUsers);
 
-/* POST REQUESTS */
-UserRouter.patch("/edituser/:id", EditUser);
+UserRouter.get("/users/:id", ViewUser);
 
+/* PATCH REQUESTS */
+UserRouter.patch("/edit__username/:id", EditUsername);
+
+UserRouter.patch("/change__password/:id", ChangePassword);
+
+/* DELETE REQUESTS */
 UserRouter.delete("/deleteuser/:id", DeleteUser);
 
 export default UserRouter;

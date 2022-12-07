@@ -40,9 +40,9 @@ const Users = () => {
   let i = 1;
 
   const handleDelete = async (id: any) => {
-    const response: any = await axiosPrivate.delete(`/deleteuser/${id}`);
-
-    await signOut();
+    const response: any = await axiosPrivate.delete(`/deleteuser/${id}`, {
+      withCredentials: true,
+    });
 
     setUsers(
       users.filter((user: any) => {
@@ -51,8 +51,8 @@ const Users = () => {
     );
   };
 
-  const handleEdit = async (id: any) => {
-    navigate(`/edituser/${id}`);
+  const handleView = async (id: any) => {
+    navigate(`/users/${id}`);
   };
 
   return (
@@ -60,19 +60,29 @@ const Users = () => {
       <div className="flex">
         {users?.length ? (
           <>
-            {users.map((user: any) => (
-              <div className="container">
+            {users.map((user: any, index: any) => (
+              <div className="container" key={index}>
                 <div className="card">
                   <div className="imgBx">
                     <img src={Logo}></img>
                   </div>
                   <div className="contentBx">
                     <h2>{user.username}</h2>
-                    <div className="size" key={i}>
+                    <div className="size">
                       <span>{i++}</span>
                     </div>
-                    <a onClick={() => handleDelete(user._id)}>Delete</a>
-                    <a onClick={() => handleEdit(user._id)}>Edit</a>
+                    <a
+                      onClick={() => handleDelete(user._id)}
+                      className="del__btn"
+                    >
+                      Delete
+                    </a>
+                    <a
+                      onClick={() => handleView(user._id)}
+                      className="del__btn"
+                    >
+                      View
+                    </a>
                   </div>
                 </div>
               </div>

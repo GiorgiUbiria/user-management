@@ -1,84 +1,53 @@
-import { useNavigate, useLocation } from "react-router-dom";
-import { useRef, useState, useEffect } from "react";
+import { useNavigate, useLocation, Link } from "react-router-dom";
+import { useRef, useState, useEffect, ReactElement } from "react";
 import useAxiosPrivate from "../hooks/useAxiosPrivate";
 
 const Personal = () => {
-  const location = useLocation();
+  const [username, setUsername] = useState() as any;
+  const [email, setEmail] = useState() as any;
+
   const axiosPrivate = useAxiosPrivate();
+  const location = useLocation();
   const navigate = useNavigate();
 
   const id = location.pathname.split("/")[2];
 
-  const userRef = useRef() as any;
-  const errRef = useRef() as any;
-
-  const [username, setUsername] = useState("");
-  const [errMsg, setErrMsg] = useState("");
-
   useEffect(() => {
-    userRef.current.focus();
+    const getUser = async () => {
+      const response = await axiosPrivate.get(`users/${id}`, {
+        withCredentials: true,
+        headers: { "Content-Type": "application/json" },
+      });
+
+      console.log(response);
+      setUsername(response.data.username);
+      setEmail(response.data.email);
+    };
+
+    getUser();
   }, []);
 
-  useEffect(() => {
-    setErrMsg("");
-  }, [username]);
-
-  const handleEditUser = async (e: any) => {
-    e.preventDefault();
-    console.log(id);
-
-    try {
-      const response = await axiosPrivate.patch(
-        `edituser/${id}`,
-        JSON.stringify({ username }),
-        {
-          headers: { "Content-Type": "application/json" },
-          withCredentials: true,
-        }
-      );
-      setUsername("");
-      navigate("/users");
-    } catch (err: any) {
-      if (!err?.response) {
-        setErrMsg("No Server Response");
-      } else if (err.response?.status === 400) {
-        setErrMsg("Missing Username");
-      } else if (err.response?.status === 401) {
-        setErrMsg("Unauthorized");
-      } else {
-        setErrMsg(err.message);
-      }
-      errRef.current.focus();
-    }
+  const changePasswordPage = async () => {
+    navigate(`/change__password/${id}`);
   };
 
   return (
-    <section>
-      <p
-        ref={errRef}
-        className={errMsg ? "errmsg" : "offscreen"}
-        aria-live="assertive"
-      >
-        {errMsg}
-      </p>
-      <h1>Edit User</h1>
-      <form onSubmit={handleEditUser}>
-        <label className="label" htmlFor="username">
-          Username:
-        </label>
-        <input
-          type="text"
-          id="username"
-          name="email"
-          ref={userRef}
-          autoComplete="off"
-          onChange={(e) => setUsername(e.target.value)}
-          value={username}
-          required
-        />
-        <button className="sign__in">Edit</button>
-      </form>
-    </section>
+    <>
+      (
+      <section className="personal__section">
+        <h1 className="personal__header"> Welcome {username} </h1>
+        <div className="personal__info">
+          <h3> Your Email: </h3>
+          <p> {email} </p>
+
+          <button className="change__password" onClick={changePasswordPage}>
+            {" "}
+            Change Password{" "}
+          </button>
+        </div>
+      </section>
+      );
+    </>
   );
 };
 

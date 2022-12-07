@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 
 import useAuth from "../hooks/useAuth";
 
-function Navigation() {
+const Navigation = () => {
   const { auth, persist }: any = useAuth();
 
   let loggedIn = false;
@@ -41,6 +41,6 @@ function Navigation() {
       </nav>
     </>
   );
-}
+};
 
 export default Navigation;

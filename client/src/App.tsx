@@ -10,12 +10,12 @@ import PersistLogin from "./components/PersistLogin";
 
 import Register from "./pages/Register";
 import Login from "./pages/Login";
+import ChangePassword from "./pages/ChangePassword";
 import Personal from "./pages/Personal";
 import Missing from "./pages/Missing";
 import Users from "./pages/Users";
 import Layout from "./pages/Layout";
 import LinkPage from "./pages/LinkPage";
-import Lounge from "./pages/Lounge";
 import Home from "./pages/Home";
 import Admin from "./pages/Admin";
 import Unauthorized from "./pages/Unauthorized";
@@ -28,12 +28,6 @@ const ROLES = {
 };
 
 function App() {
-  /* 
-    1. Style Home Page and Navigation Page
-    2. Add Personal Page for Users
-    3. Add Photo Upload Functionality for Users
-  */
-
   return (
     <>
       <Navigation></Navigation>
@@ -51,23 +45,19 @@ function App() {
             <Route element={<RequireAuth allowedRoles={[ROLES.Standard]} />}>
               <Route path="/" element={<Home />} />
               <Route path="/users" element={<Users />} />
-              <Route path="edituser/:id" element={<Personal />} />
+              <Route path="/users/:id" element={<Personal />} />
+              <Route
+                path="/change__password/:id"
+                element={<ChangePassword />}
+              />
             </Route>
 
-            <Route element={<RequireAuth allowedRoles={[ROLES.Banned]} />}>
+            <Route element={<RequireAuth allowedRoles={[ROLES.Standard]} />}>
               <Route path="banned" element={<Banned />} />
             </Route>
 
-            <Route element={<RequireAuth allowedRoles={[ROLES.Admin]} />}>
+            <Route element={<RequireAuth allowedRoles={[ROLES.Standard]} />}>
               <Route path="admin" element={<Admin />} />
-            </Route>
-
-            <Route
-              element={
-                <RequireAuth allowedRoles={[ROLES.Banned, ROLES.Admin]} />
-              }
-            >
-              <Route path="lounge" element={<Lounge />} />
             </Route>
           </Route>
 
@@ -82,5 +72,3 @@ function App() {
 }
 
 export default App;
-
-/* Backend API does work. Frontend Register and Login Forms Work too. Need to Protect Routes, Implement Refresh Token, Persistent Login */

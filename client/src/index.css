@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Nunito&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Dancing+Script&family=Nunito&family=Rubik&family=Ubuntu&display=swap");
 
 * {
   margin: 0;
@@ -7,8 +7,7 @@
 }
 
 html {
-  font-family: "Nunito", sans-serif;
-  font-size: 22px;
+  font-family: "Rubik", sans-serif;
   color: #fff;
 }
 
@@ -17,76 +16,12 @@ body {
   background-color: whitesmoke;
 }
 
-.App {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  min-height: 100vh;
-  padding: 1rem 0.5rem;
-}
-
-section {
-  width: 100%;
-  max-width: 420px;
-  min-height: 400px;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  padding: 1rem;
-  background-color: rgb(0, 0, 0);
-  color: gainsboro;
-}
-
-form {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-evenly;
-  flex-grow: 1;
-  padding-bottom: 1rem;
-}
-
-a,
-a:visited {
-  color: #fff;
-}
-
-input[type="text"],
-input[type="password"],
-input[type="email"],
-button,
-textarea {
-  font-family: "Nunito", sans-serif;
-  font-size: 22px;
-  padding: 0.25rem;
-  border-radius: 0.5rem;
-}
-
-label,
-button {
-  margin-top: 1rem;
-}
-
-button {
+.errmsg {
+  background-color: lightpink;
+  color: firebrick;
+  font-weight: bold;
   padding: 0.5rem;
-}
-
-li {
-  list-style-type: none;
-}
-
-.instructions {
-  font-size: 0.75rem;
-  border-radius: 0.5rem;
-  background: #000;
-  color: #fff;
-  padding: 0.25rem;
-  position: relative;
-  bottom: -10px;
-}
-
-.instructions > svg {
-  margin-right: 0.25rem;
+  margin-bottom: 0.5rem;
 }
 
 .offscreen {
@@ -96,6 +31,97 @@ li {
 
 .hide {
   display: none;
+}
+
+.App {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  padding: 1rem 0.5rem;
+}
+
+.inline__span {
+  display: inline-block;
+}
+
+.login__section {
+  width: 100%;
+  max-width: 38rem;
+  min-height: 32rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  padding: 1rem;
+  color: rgb(34, 34, 34);
+}
+
+.login__form {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  flex-grow: 1;
+  padding-bottom: 1rem;
+}
+
+input[type="password"],
+input[type="text"],
+input[type="email"],
+button,
+textarea {
+  font-family: "Nunito", sans-serif;
+  font-size: 1.5rem;
+  padding: 0.25rem;
+  border-radius: 0.5rem;
+}
+
+.login__header {
+  margin: 0 auto;
+  font-size: 2rem;
+  color: black;
+}
+
+.login__button {
+  padding: 0.5rem;
+  margin-top: 1rem;
+}
+
+.form__label {
+  font-size: 1.2rem;
+  color: black;
+  margin-top: 1rem;
+}
+
+.persistCheck {
+  font-size: 1rem;
+  margin-top: 0.5rem;
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-end;
+}
+
+.persist__label {
+  margin: -0.2rem 0.2rem;
+}
+
+a,
+a:visited {
+  text-decoration: none;
+  color: black;
+}
+
+.login__button {
+  background-color: rgb(221, 221, 221);
+}
+
+.login__button:hover {
+  background-color: white !important;
+}
+
+.register__link:hover {
+  color: rgb(92, 89, 89);
 }
 
 .valid {
@@ -108,48 +134,101 @@ li {
   margin-left: 0.25rem;
 }
 
-.label {
-  color: whitesmoke;
+.register__section {
+  width: 100%;
+  max-width: 38rem;
+  min-height: 32rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  padding: 1rem;
+  color: rgb(34, 34, 34);
 }
 
-.errmsg {
-  background-color: lightpink;
-  color: firebrick;
-  font-weight: bold;
+.register__form {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  flex-grow: 1;
+  padding-bottom: 1rem;
+}
+
+.instructions {
+  font-size: 0.75rem;
+  border-radius: 0.5rem;
+  background: #000;
+  color: #fff;
+  padding: 0.25rem;
+  position: relative;
+  bottom: -0.25rem;
+}
+
+.instructions > svg {
+  margin-right: 0.25rem;
+}
+
+.login__link:hover {
+  color: rgb(92, 89, 89);
+}
+
+.register__button {
+  background-color: rgb(221, 221, 221);
   padding: 0.5rem;
-  margin-bottom: 0.5rem;
+  margin-top: 1rem;
 }
 
-.line {
-  display: inline-block;
+.register__button:disabled {
+  background-color: rgb(94, 94, 94);
+  color: black;
+}
+
+.register__button:enabled::before {
+  transform: scaleX(0);
+  transform-origin: bottom right;
+}
+
+.register__button:hover:enabled::before {
+  transform: scaleX(1);
+  transform-origin: bottom left;
+}
+
+.register__button:enabled::before {
+  content: " ";
+  display: block;
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  inset: 0 0 0 0;
+  background-color: rgb(153, 255, 179);
+  z-index: -1;
+  transition: transform 0.3s ease;
+}
+
+.register__header {
+  margin: 0 auto;
+  font-size: 2rem;
+  color: black;
 }
 
 .flexGrow {
+  font-size: 2rem;
   flex-grow: 1;
   display: flex;
   justify-content: flex-start;
   align-items: flex-end;
 }
 
-.persistCheck {
-  font-size: 0.75rem;
-  margin-top: 10px;
-  display: flex;
-  justify-content: flex-start;
-  align-items: flex-end;
+.missing__header {
+  color: black;
+  font-size: 8rem;
 }
 
-.persistCheck label {
-  margin: 0;
-}
-
-.sign__in {
-  color: rgb(44, 43, 43);
-}
-
-.sign__in:hover {
-  box-shadow: 2px 2px 5px white;
-  font-size: 105%;
+.missing__paragraph {
+  color: black;
+  font-size: 3rem;
+  margin-bottom: 2rem;
 }
 
 [type="checkbox"] {
@@ -166,14 +245,17 @@ li {
   width: 100%;
   height: 3rem;
   background-color: rgb(41, 41, 41);
-  color: whitesmoke;
   display: flex;
   align-items: center;
+  flex-wrap: wrap;
   justify-content: flex-start;
+  font-family: "Ubuntu", sans-serif;
 }
 
 .nav a {
   text-decoration: none;
+  color: rgb(223, 223, 223);
+  font-size: 1.2rem;
 }
 
 .nav a:hover {
@@ -189,10 +271,104 @@ li {
   margin: 0 0.5rem;
 }
 
-.admin__nav {
-  color: rgb(161, 42, 42);
+.del__btn {
+  width: 40%;
+  margin: 0 0.5rem;
+  text-align: center;
 }
 
-.priv__pages {
-  color: red;
+.del__btn:hover {
+  cursor: pointer;
+}
+
+.admin__header {
+  color: black;
+  font-size: 8rem;
+}
+
+.admin__paragraph {
+  color: black;
+  font-size: 3rem;
+  margin-bottom: 2rem;
+}
+
+.admin__header {
+  color: black;
+  font-size: 8rem;
+}
+
+.admin__paragraph {
+  color: black;
+  font-size: 3rem;
+  margin-bottom: 2rem;
+}
+
+.home__section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.links {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.home__header {
+  color: black;
+  font-size: 6rem;
+}
+
+.home__paragraph {
+  color: black;
+  font-size: 3rem;
+  font-weight: bold;
+}
+
+.link__section {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  font-size: 1.5rem;
+}
+
+.link__header {
+  color: black;
+  font-size: 4rem;
+}
+
+.link__header2 {
+  color: black;
+  font-size: 2.5rem;
+}
+
+.personal__section {
+  color: black;
+  display: flex;
+  flex-direction: column;
+}
+
+.personal__header {
+  font-size: 4rem;
+  margin-bottom: 2rem;
+}
+
+.personal__section h3 {
+  font-size: 2rem;
+}
+
+.personal__section p {
+  font-size: 1.5rem;
+}
+
+.change__password {
+  margin-top: 2rem;
+  background-color: rgb(180, 180, 180);
+}
+
+.change__password:hover {
+  background-color: white;
 }
